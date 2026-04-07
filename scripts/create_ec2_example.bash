@@ -2,12 +2,12 @@
 set -euo pipefail
 
 AWS_REGION="eu-central-1"
-AMI_ID="ami-xxxxxxxxxxxxxxxxx"
+AMI_ID="ami-020510cc1127d41e9"
 INSTANCE_TYPE="t3.micro"
-KEY_NAME="your-keypair-name"
-SECURITY_GROUP_ID="sg-xxxxxxxxxxxxxxxxx"
-SUBNET_ID="subnet-xxxxxxxxxxxxxxxxx"
-INSTANCE_NAME="ec2-welcome-app-demo"
+KEY_NAME="mgm-keypair"
+SECURITY_GROUP_ID="sg-0a644c3be5f47bfa5"
+SUBNET_ID="subnet-018f15ab7481de6cb"
+INSTANCE_NAME="mgm-ec2-welcome-dev"
 USER_DATA_FILE="userdata/userdata_httpd.bash"
 
 INSTANCE_ID=$(
@@ -19,7 +19,12 @@ INSTANCE_ID=$(
         --security-group-ids "${SECURITY_GROUP_ID}" \
         --subnet-id "${SUBNET_ID}" \
         --user-data "file://${USER_DATA_FILE}" \
-        --tag-specifications "ResourceType=instance,Tags=[{Key=Name,Value=${INSTANCE_NAME}}]" \
+        --tag-specifications 'ResourceType=instance,Tags=[
+            {Key=Name,Value=mgm-ec2-welcome-dev},
+            {Key=Project,Value=cloud-data-portfolio},
+            {Key=Owner,Value=mgm},
+            {Key=Environment,Value=dev}
+        ]' \
         --query 'Instances[0].InstanceId' \
         --output text
 )

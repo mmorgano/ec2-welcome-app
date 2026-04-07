@@ -78,6 +78,46 @@ Possible future extensions:
 
 ---
 
+## Demo
+
+This application is deployed on AWS EC2 using a fully automated bootstrap process.
+
+Example output:
+
+![Demo](docs/screenshot.png)
+
+---
+
+## How to Deploy
+
+1. Configure AWS CLI:
+
+```bash
+aws configure
+```
+
+2. Run the script:
+
+```bash
+./scripts/create_ec2_example.bash
+```
+
+3. Open the public IP in your browser
+
+---
+
+## Cleanup
+
+Terminate the instance to avoid costs:
+
+```bash
+aws ec2 terminate-instances \
+  --region eu-central-1 \
+  --instance-ids <INSTANCE_ID>
+```
+
+
+
 ## Author
 
 Maurizio Morgano
