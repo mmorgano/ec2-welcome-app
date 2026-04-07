@@ -30,8 +30,11 @@ ec2-welcome-app/
 ├── README.md
 ├── userdata/
 │   └── userdata_httpd.bash
-└── scripts/
-    └── create_ec2_example.bash
+├── scripts/
+│   └── create_ec2_example.bash
+├── config.example.bash
+├── config.local.bash (not versioned)
+├── .gitignore
 ```
 
 ---
@@ -49,32 +52,60 @@ At first boot, the instance automatically:
 
 ---
 
-## Cloud Scope
+## Configuration
 
-This is a demonstration project focused on:
+This project separates **code** from **environment-specific configuration**.
 
-* EC2 provisioning basics
-* Linux service bootstrap
-* reproducible setup through scripting
+### 1. Copy the example config
 
-It is intentionally simple.
+```bash
+cp config.example.bash config.local.bash
+```
+
+### 2. Edit with your values
+
+```bash
+nano config.local.bash
+```
+
+Example:
+
+```bash
+AMI_ID="ami-xxxxxxxx"
+KEY_NAME="your-keypair"
+SECURITY_GROUP_ID="sg-xxxxxxxx"
+SUBNET_ID="subnet-xxxxxxxx"
+```
+
+### 3. Important
+
+* `config.local.bash` is **not committed**
+* it is ignored via `.gitignore`
+* never store credentials or sensitive data in the repository
 
 ---
 
-## Data Sources
+## Cloud Requirements
 
-This project does not use external datasets.
+Before running the script, ensure:
+
+* AWS CLI is configured (`aws configure`)
+* A valid key pair exists
+* The security group allows HTTP access:
+
+```text
+Port 80 → 0.0.0.0/0
+```
 
 ---
 
-## Next Improvements
+## How to Deploy
 
-Possible future extensions:
+```bash
+./scripts/create_ec2_example.bash
+```
 
-* parameterized EC2 creation script
-* Nginx alternative
-* HTTPS setup
-* deployment through Terraform or CloudFormation
+Then open the public IP in your browser.
 
 ---
 
@@ -88,24 +119,6 @@ Example output:
 
 ---
 
-## How to Deploy
-
-1. Configure AWS CLI:
-
-```bash
-aws configure
-```
-
-2. Run the script:
-
-```bash
-./scripts/create_ec2_example.bash
-```
-
-3. Open the public IP in your browser
-
----
-
 ## Cleanup
 
 Terminate the instance to avoid costs:
@@ -116,7 +129,28 @@ aws ec2 terminate-instances \
   --instance-ids <INSTANCE_ID>
 ```
 
+---
 
+## Cloud Scope
+
+This is a demonstration project focused on:
+
+* EC2 provisioning basics
+* Linux service bootstrap
+* reproducible setup through scripting
+
+---
+
+## Next Improvements
+
+Possible future extensions:
+
+* parameterized EC2 creation script
+* Nginx alternative
+* HTTPS setup
+* deployment through Terraform or CloudFormation
+
+---
 
 ## Author
 
